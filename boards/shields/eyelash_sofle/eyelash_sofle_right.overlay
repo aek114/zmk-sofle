@@ -6,12 +6,12 @@
 #include "eyelash_sofle.dtsi"
 #include <behaviors/battery_history_request.dtsi>
 
-/* 1. Disable SPI0 to free up P0.26 (SDA), P0.27 (SCL), and P0.06 (CS/INT) */
+/* 1. Disable SPI0 to free up P0.26, P0.27, and P0.06 */
 &spi0 {
     status = "disabled";
 };
 
-/* 2. Define I2C pins using pinctrl (Required for Zephyr 3.5+) */
+/* 2. Define I2C pins using pinctrl (Zephyr 3.5+ standard) */
 &pinctrl {
     i2c0_default: i2c0_default {
         group1 {
@@ -29,24 +29,24 @@
     };
 };
 
-/* 3. Configure I2C0 for the 5-pin OLED header */
+/* 3. Configure I2C0 for the 5-pin header */
 &i2c0 {
     status = "okay";
     pinctrl-0 = <&i2c0_default>;
     pinctrl-1 = <&i2c0_sleep>;
     pinctrl-names = "default", "sleep";
 
-        glidepoint: glidepoint@2a {
+    glidepoint: glidepoint@2a {
         compatible = "cirque,pinnacle";
         reg = <0x2a>;
         status = "okay";
-        data-ready-gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;
+        dr-gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;
         sensitivity = "4x";
-        sleep-mode-enable;
+        sleep;
     };
 };
 
-/* 4. Split proxy configuration to send trackpad data from right half to left half */
+/* 4. Split proxy configuration */
 &glidepoint_split {
     status = "okay";
     device = <&glidepoint>;
