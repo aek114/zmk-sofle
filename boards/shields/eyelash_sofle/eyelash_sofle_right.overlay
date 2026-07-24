@@ -48,7 +48,7 @@
 
 /* 4. Split proxy configuration */
 &glidepoint_split {
-    status = "okay";
+    status = "disabled";
     device = <&glidepoint>;
 };
 
