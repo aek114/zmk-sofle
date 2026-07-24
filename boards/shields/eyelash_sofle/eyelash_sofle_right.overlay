@@ -31,13 +31,13 @@
 
 /* 3. Configure I2C0 for the 5-pin header */
 &i2c0 {
-    status = "okay"; /* Re-enabled so the bus doesn't break the device tree */
+    status = "okay"; /* Bus is on, but the device is invisible to the driver */
     pinctrl-0 = <&i2c0_default>;
     pinctrl-1 = <&i2c0_sleep>;
     pinctrl-names = "default", "sleep";
 
     glidepoint: glidepoint@2a {
-        compatible = "cirque,pinnacle-disabled"; /* CHANGED: This bypasses the driver completely */
+        compatible = "cirque,pinnacle-disabled"; /* Bypasses the driver completely */
         reg = <0x2a>;
         status = "okay";
         dr-gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;
@@ -48,7 +48,7 @@
 
 /* 4. Split proxy configuration */
 &glidepoint_split {
-    status = "okay";
+    status = "disabled"; /* <--- THIS FIXES THE LINKER ERROR */
     device = <&glidepoint>;
 };
 
