@@ -11,12 +11,27 @@
     status = "disabled";
 };
 
-/* 2. Configure I2C0 for the 5-pin OLED header */
+/* 2. Define I2C pins using pinctrl (Required for Zephyr 3.5+) */
+&pinctrl {
+    i2c0_default: i2c0_default {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,
+                    <NRF_PSEL(TWIM_SCL, 0, 27)>;
+        };
+    };
+
+    i2c0_sleep: i2c0_sleep {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,
+                    <NRF_PSEL(TWIM_SCL, 0, 27)>;
+            low-power-enable;
+        };
+    };
+};
+
+/* 3. Configure I2C0 for the 5-pin OLED header */
 &i2c0 {
     status = "okay";
-    sda-pin = <26>;
-    scl-pin = <27>;
-
     pinctrl-0 = <&i2c0_default>;
     pinctrl-1 = <&i2c0_sleep>;
     pinctrl-names = "default", "sleep";
@@ -28,17 +43,16 @@
         data-ready-gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;
         sensitivity = "4x";
         sleep-mode-enable;
-        /* no-taps; */ /* Optional: Uncomment this line to disable hardware tap-to-click */
     };
 };
 
-/* 3. Split proxy configuration to send trackpad data from right half to left half */
+/* 4. Split proxy configuration to send trackpad data from right half to left half */
 &glidepoint_split {
     status = "okay";
     device = <&glidepoint>;
 };
 
-/* 4. Original Kscan Matrix Configuration */
+
 &kscan0 {
     compatible = "zmk,kscan-gpio-matrix";
     row-gpios
@@ -59,7 +73,7 @@
         ;
 };
 
-/* 5. Original Column Offset for Right Half */
+
 &default_transform {
     col-offset = <7>;
 };
