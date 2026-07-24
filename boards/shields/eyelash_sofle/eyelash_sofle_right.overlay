@@ -1,13 +1,58 @@
 /*
-*
-* Copyright (c) 2021 Darryl deHaan
-* SPDX-License-Identifier: MIT
-*
-*/
+ * Copyright (c) 2021 Darryl deHaan
+ * SPDX-License-Identifier: MIT
+ */
 
 #include "eyelash_sofle.dtsi"
 #include <behaviors/battery_history_request.dtsi>
 
+/* 1. Disable SPI0 to free up P0.26, P0.27, and P0.06 */
+&spi0 {
+    status = "disabled";
+};
+
+/* 2. Define I2C pins using pinctrl */
+&pinctrl {
+    i2c0_default: i2c0_default {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,
+                    <NRF_PSEL(TWIM_SCL, 0, 27)>;
+        };
+    };
+
+    i2c0_sleep: i2c0_sleep {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,
+                    <NRF_PSEL(TWIM_SCL, 0, 27)>;
+            low-power-enable;
+        };
+    };
+};
+
+/* 3. Configure I2C0 for the 5-pin header */
+&i2c0 {
+    status = "okay";
+    pinctrl-0 = <&i2c0_default>;
+    pinctrl-1 = <&i2c0_sleep>;
+    pinctrl-names = "default", "sleep";
+
+    glidepoint: glidepoint@2a {
+        compatible = "cirque,pinnacle";
+        reg = <0x2a>;
+        status = "okay";
+        dr-gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;
+        sensitivity = "4x";
+        sleep;
+    };
+};
+
+/* 4. Split proxy configuration (routes right half trackpad to left half) */
+&glidepoint_split {
+    status = "okay";
+    device = <&glidepoint>;
+};
+
+/* 5. Original Kscan Matrix Configuration */
 &kscan0 {
     compatible = "zmk,kscan-gpio-matrix";
     row-gpios
@@ -28,6 +73,7 @@
         ;
 };
 
+/* 6. Original Column Offset for Right Half */
 &default_transform {
     col-offset = <7>;
 };
