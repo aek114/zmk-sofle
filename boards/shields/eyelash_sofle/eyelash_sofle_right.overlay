@@ -6,8 +6,14 @@
 #include "eyelash_sofle.dtsi"
 #include <behaviors/battery_history_request.dtsi>
 
-/* 1. Disable SPI0 to free up P0.26 (SDA), P0.27 (SCL), and P0.06 (CS/INT) */
+/* 1. COMPLETELY disable SPI0 and all its variants to free up P0.26, P0.27, and P0.06 for I2C */
 &spi0 {
+    status = "disabled";
+};
+&spim0 {
+    status = "disabled";
+};
+&spis0 {
     status = "disabled";
 };
 
@@ -52,7 +58,7 @@
     device = <&glidepoint>;
 };
 
-
+/* 5. Original Kscan Matrix Configuration */
 &kscan0 {
     compatible = "zmk,kscan-gpio-matrix";
     row-gpios
@@ -73,7 +79,7 @@
         ;
 };
 
-
+/* 6. Original Column Offset for Right Half */
 &default_transform {
     col-offset = <7>;
 };
