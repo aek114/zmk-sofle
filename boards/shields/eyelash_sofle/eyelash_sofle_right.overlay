@@ -11,7 +11,7 @@
     status = "disabled";
 };
 
-/* 2. Define I2C pins using pinctrl (Zephyr 3.5+ standard) */
+/* 2. Define I2C pins using pinctrl */
 &pinctrl {
     i2c0_default: i2c0_default {
         group1 {
@@ -31,13 +31,13 @@
 
 /* 3. Configure I2C0 for the 5-pin header */
 &i2c0 {
-    status = "disabled";
+    status = "okay"; /* Re-enabled so the bus doesn't break the device tree */
     pinctrl-0 = <&i2c0_default>;
     pinctrl-1 = <&i2c0_sleep>;
     pinctrl-names = "default", "sleep";
 
     glidepoint: glidepoint@2a {
-        compatible = "cirque,pinnacle";
+        compatible = "cirque,pinnacle-disabled"; /* CHANGED: This bypasses the driver completely */
         reg = <0x2a>;
         status = "okay";
         dr-gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;
@@ -48,7 +48,7 @@
 
 /* 4. Split proxy configuration */
 &glidepoint_split {
-    status = "disabled";
+    status = "okay";
     device = <&glidepoint>;
 };
 
