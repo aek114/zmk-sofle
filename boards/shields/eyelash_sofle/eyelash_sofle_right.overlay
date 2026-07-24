@@ -6,14 +6,8 @@
 #include "eyelash_sofle.dtsi"
 #include <behaviors/battery_history_request.dtsi>
 
-/* 1. COMPLETELY disable SPI0 and all its variants to free up P0.26, P0.27, and P0.06 for I2C */
+/* 1. Disable SPI0 to free up P0.26 (SDA), P0.27 (SCL), and P0.06 (CS/INT) */
 &spi0 {
-    status = "disabled";
-};
-&spim0 {
-    status = "disabled";
-};
-&spis0 {
     status = "disabled";
 };
 
