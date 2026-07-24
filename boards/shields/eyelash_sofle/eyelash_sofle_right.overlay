@@ -36,8 +36,8 @@
     pinctrl-1 = <&i2c0_sleep>;
     pinctrl-names = "default", "sleep";
 
-    glidepoint: glidepoint@2a {
-        compatible = "cirque,pinnacle-i2c";
+        glidepoint: glidepoint@2a {
+        compatible = "cirque,pinnacle";
         reg = <0x2a>;
         status = "okay";
         data-ready-gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;
