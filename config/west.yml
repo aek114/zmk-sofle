@@ -27,8 +27,9 @@ manifest:
     - name: zmk-module-runtime-input-processor
       remote: cormoran
       revision: zmk-v0.3.0.0
-    - name: zmk-module-cirque-pinnacle
-      remote: zmkfirmware
+    - name: cirque-input-module
+      url: https://github.com/petejohanson/cirque-input-module
       revision: main
+      path: modules/cirque-input-module
   self:
     path: config
