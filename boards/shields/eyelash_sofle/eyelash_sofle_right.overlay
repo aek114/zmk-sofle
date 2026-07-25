@@ -16,7 +16,7 @@
     i2c0_default: i2c0_default {
         group1 {
             psels = <NRF_PSEL(TWIM_SDA, 0, 17)>,
-                    <NRF_PSEL(TWIM_SCL, 0, 20)>;
+                    <NRF_PSEL(TWIM_SCL, 0, 25)>;
             bias-pull-up;
         };
     };
@@ -24,7 +24,7 @@
     i2c0_sleep: i2c0_sleep {
         group1 {
             psels = <NRF_PSEL(TWIM_SDA, 0, 17)>,
-                    <NRF_PSEL(TWIM_SCL, 0, 20)>;
+                    <NRF_PSEL(TWIM_SCL, 0, 25)>;
             bias-pull-up;
             low-power-enable;
         };
@@ -54,12 +54,7 @@
     device = <&glidepoint>;
 };
 
-/* 5. DISABLE THE SCREEN ON THE RIGHT HALF */
-&nice_view {
-    status = "disabled";
-};
 
-/* 6. Original Kscan Matrix Configuration */
 &kscan0 {
     compatible = "zmk,kscan-gpio-matrix";
     row-gpios
@@ -80,7 +75,7 @@
         ;
 };
 
-/* 7. Original Column Offset for Right Half */
+
 &default_transform {
     col-offset = <7>;
 };
