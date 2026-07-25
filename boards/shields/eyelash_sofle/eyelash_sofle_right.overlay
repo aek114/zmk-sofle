@@ -11,12 +11,13 @@
     status = "disabled";
 };
 
-/* 2. Define I2C pins using pinctrl */
+/* 2. Define I2C pins using pinctrl WITH INTERNAL PULL-UPS */
 &pinctrl {
     i2c0_default: i2c0_default {
         group1 {
             psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,
                     <NRF_PSEL(TWIM_SCL, 0, 27)>;
+            bias-pull-up; /* <--- ENABLES INTERNAL PULL-UPS */
         };
     };
 
@@ -24,6 +25,7 @@
         group1 {
             psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,
                     <NRF_PSEL(TWIM_SCL, 0, 27)>;
+            bias-pull-up; /* <--- KEEPS THEM PULLED UP DURING SLEEP */
             low-power-enable;
         };
     };
@@ -46,7 +48,7 @@
     };
 };
 
-/* 4. Split proxy configuration (routes right half trackpad to left half) */
+/* 4. Split proxy configuration (sends right half trackpad data to left half) */
 &glidepoint_split {
     status = "okay";
     device = <&glidepoint>;
