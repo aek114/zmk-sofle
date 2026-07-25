@@ -6,24 +6,24 @@
 #include "eyelash_sofle.dtsi"
 #include <behaviors/battery_history_request.dtsi>
 
-/* 1. Disable SPI0 just in case */
+/* 1. Disable SPI0 to free up the pins */
 &spi0 {
     status = "disabled";
 };
 
-/* 2. Define I2C pins using P0.17 and P0.20 */
+/* 2. Define I2C pins using YOUR exact traced GPIOs */
 &pinctrl {
     i2c0_default: i2c0_default {
         group1 {
-            psels = <NRF_PSEL(TWIM_SDA, 0, 31)>,
-                    <NRF_PSEL(TWIM_SCL, 0, 30)>;
+            psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,
+                    <NRF_PSEL(TWIM_SCL, 0, 30)>; /* Pad 25 = P0.30 */
             bias-pull-up;
         };
     };
 
     i2c0_sleep: i2c0_sleep {
         group1 {
-            psels = <NRF_PSEL(TWIM_SDA, 0, 31)>,
+            psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,
                     <NRF_PSEL(TWIM_SCL, 0, 30)>;
             bias-pull-up;
             low-power-enable;
@@ -42,7 +42,7 @@
         compatible = "cirque,pinnacle";
         reg = <0x2a>;
         status = "okay";
-        dr-gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;
+        dr-gpios = <&gpio0 27 GPIO_ACTIVE_HIGH>; /* Pad 14 (CS) = P0.27 */
         sensitivity = "4x";
         sleep;
     };
