@@ -6,17 +6,17 @@
 #include "eyelash_sofle.dtsi"
 #include <behaviors/battery_history_request.dtsi>
 
-/* 1. Disable SPI0 */
+/* 1. Disable SPI0 completely */
 &spi0 {
     status = "disabled";
 };
 
-/* 2. Define I2C pins using the pins we just verified */
+/* 2. Force I2C to use the Screen's Pins (P0.17 and P0.20) */
 &pinctrl {
     i2c0_default: i2c0_default {
         group1 {
             psels = <NRF_PSEL(TWIM_SDA, 0, 17)>,
-                    <NRF_PSEL(TWIM_SCL, 0, 7)>; /* Pad 22 = P0.07 */
+                    <NRF_PSEL(TWIM_SCL, 0, 20)>;
             bias-pull-up;
         };
     };
@@ -24,7 +24,7 @@
     i2c0_sleep: i2c0_sleep {
         group1 {
             psels = <NRF_PSEL(TWIM_SDA, 0, 17)>,
-                    <NRF_PSEL(TWIM_SCL, 0, 7)>;
+                    <NRF_PSEL(TWIM_SCL, 0, 20)>;
             bias-pull-up;
             low-power-enable;
         };
@@ -54,7 +54,12 @@
     device = <&glidepoint>;
 };
 
-/* 5. Original Kscan Matrix Configuration */
+/* 5. DISABLE THE SCREEN ON THE RIGHT HALF */
+&nice_view {
+    status = "disabled";
+};
+
+/* 6. Original Kscan Matrix Configuration */
 &kscan0 {
     compatible = "zmk,kscan-gpio-matrix";
     row-gpios
@@ -75,7 +80,7 @@
         ;
 };
 
-/* 6. Original Column Offset for Right Half */
+/* 7. Original Column Offset for Right Half */
 &default_transform {
     col-offset = <7>;
 };
