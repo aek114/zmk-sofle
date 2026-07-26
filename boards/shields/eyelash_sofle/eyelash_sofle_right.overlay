@@ -6,12 +6,12 @@
 #include "eyelash_sofle.dtsi"
 #include <behaviors/battery_history_request.dtsi>
 
-/* 1. Disable SPI0 completely */
+/* Disable SPI0 to free pins P0.17, P0.20, and gpio0 6 */
 &spi0 {
     status = "disabled";
 };
 
-/* 2. Force I2C to use the Screen's Pins (P0.17 and P0.20) */
+/* Set up software pull-ups on I2C lines */
 &pinctrl {
     i2c0_default: i2c0_default {
         group1 {
@@ -31,7 +31,7 @@
     };
 };
 
-/* 3. Configure I2C0 */
+/* Initialize I2C and Cirque Trackpad */
 &i2c0 {
     status = "okay";
     pinctrl-0 = <&i2c0_default>;
@@ -39,22 +39,22 @@
     pinctrl-names = "default", "sleep";
 
     glidepoint: glidepoint@2a {
-    compatible = "cirque,pinnacle";
-    reg = <0x2a>;
-    status = "okay";
-    dr-gpios = <&gpio0 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-    sensitivity = "4x";
-    sleep;
-};
+        compatible = "cirque,pinnacle";
+        reg = <0x2a>;
+        status = "okay";
+        dr-gpios = <&gpio0 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+        sensitivity = "4x";
+        sleep;
+    };
 };
 
-/* 4. Split proxy */
+/* Route trackpad data to the split transmitter */
 &glidepoint_split {
     status = "okay";
     device = <&glidepoint>;
 };
 
-
+/* Matrix definition for right half */
 &kscan0 {
     compatible = "zmk,kscan-gpio-matrix";
     row-gpios
@@ -65,7 +65,7 @@
         , <&gpio1 9 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
         ;
     col-gpios
-       = <&gpio0 22 GPIO_ACTIVE_HIGH>
+        = <&gpio0 22 GPIO_ACTIVE_HIGH>
         , <&gpio0 29 GPIO_ACTIVE_HIGH>
         , <&gpio0 3 GPIO_ACTIVE_HIGH>
         , <&gpio0 28 GPIO_ACTIVE_HIGH>
@@ -74,7 +74,6 @@
         , <&gpio0 23 GPIO_ACTIVE_HIGH>
         ;
 };
-
 
 &default_transform {
     col-offset = <7>;
