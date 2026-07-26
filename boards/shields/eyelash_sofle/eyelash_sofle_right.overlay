@@ -38,14 +38,14 @@
     pinctrl-1 = <&i2c0_sleep>;
     pinctrl-names = "default", "sleep";
 
-    glidepoint: glidepoint@2c {
-        compatible = "cirque,pinnacle";
-        reg = <0x2c>;
-        status = "okay";
-        dr-gpios = <&gpio0 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        sensitivity = "4x";
-        sleep;
-    };
+    glidepoint: glidepoint@2a {
+    compatible = "cirque,pinnacle";
+    reg = <0x2a>;
+    status = "okay";
+    dr-gpios = <&gpio0 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+    sensitivity = "4x";
+    sleep;
+};
 };
 
 /* 4. Split proxy */
